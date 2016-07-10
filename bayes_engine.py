@@ -1,6 +1,7 @@
 from pyspark.mllib.classification import NaiveBayes, NaiveBayesModel
 
 import os
+import shutil
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,8 +21,9 @@ class BayesEngine:
             .map(lambda line: line.split(",")).map(lambda tokens: (int(tokens[0]),int(tokens[1]),float(tokens[2]))).cache()
 
         if os.path.isfile('/tmp/Bayes.model'):
-            NaiveBayesModel.load(sc, '/tmp/Bayes.model')
-        else:
+            self.model = NaiveBayesModel.load(sc, '/tmp/Bayes.model')
+        if not self.model:
             self.__train_model()
+            shutil.rmtree('/tmp/Bayes.model',ignore_errors=True)
             self.model.save(self.sc,'/tmp/Bayes.model')
 
