@@ -35,7 +35,8 @@ def run_server(app):
  
 if __name__ == "__main__":
     # Init spark context and load libraries
-    dataset_path = os.path.join(os.environ['SPARK_MOVIE_LENS_DIR'], 'datasets', 'ml-latest')
+    #dataset_path = os.path.join(os.environ['SPARK_MOVIE_LENS_DIR'], 'datasets', 'ml-latest')
+    dataset_path = os.path.join(os.environ['SPARK_MOVIE_LENS_DIR'], 'data', 'mllib')
     sc = init_spark_context()
     app = create_app(sc, dataset_path)
 

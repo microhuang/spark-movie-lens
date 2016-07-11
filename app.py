@@ -1,8 +1,14 @@
+# -*- coding:utf-8 -*-
+
+
 from flask import Blueprint
 main = Blueprint('main', __name__)
  
 import json
+
 from engine import RecommendationEngine
+from engines.gradient_boosted_trees_engine import GradientBoostedTreesEngin
+from engines.bayes_engine import BayesEngine
  
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -36,11 +42,19 @@ def add_ratings(user_id):
     return json.dumps(ratings)
  
  
-def create_app(spark_context, dataset_path):
-    global recommendation_engine 
+def init_engine(spark_context,dataset_path):
+    #GBTEngine = GradientBoostedTreesEngin(spark_context, dataset_path)
+    BEngine = BayesEngine(spark_context, dataset_path)
 
-    recommendation_engine = RecommendationEngine(spark_context, dataset_path)    
+def create_app(spark_context, dataset_path):
+    #初始模型
+
+    #global recommendation_engine 
+
+    #recommendation_engine = RecommendationEngine(spark_context, dataset_path)    
     
+    init_engine(spark_context, dataset_path)
+
     app = Flask(__name__)
     app.register_blueprint(main)
     return app 
